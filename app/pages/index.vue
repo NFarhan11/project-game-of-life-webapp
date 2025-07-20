@@ -8,7 +8,7 @@
     </div>
 
     <div class="grid-container">
-      <div v-for="(row, rowIndex) in grid" :key="rowIndex" class="grid-row">
+      <div v-for="(row, rowIndex) in grid" :key="rowIndex">
         <div v-for="(cell, colIndex) in row" :key="colIndex" class="cell">
         </div>
       </div>
@@ -37,22 +37,15 @@ onMounted(() => {
 <style scoped>
 .grid-container {
   display: flex;
-  flex-direction: column;
-  border: 1px solid #ccc;
+  border: 1px solid;
   width: fit-content;
-  /* Adjust based on cellSize and gridSize */
   margin: 20px auto;
-}
-
-.grid-row {
-  display: flex;
 }
 
 .cell {
   width: v-bind(cellSize + 'px');
-  /* Use v-bind for dynamic CSS variable */
   height: v-bind(cellSize + 'px');
-  border: 1px solid #eee;
+  border: 2px solid;
   background-color: #f0f0f0;
   cursor: pointer;
 }
