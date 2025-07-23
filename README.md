@@ -1,7 +1,3 @@
-# Nuxt Minimal Starter
-
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
 ## Setup
 
 Make sure to install dependencies:
@@ -38,38 +34,32 @@ yarn dev
 bun run dev
 ```
 
-## Production
+## Notes
 
-Build the application for production:
+### Grid Representation
 
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+```javascript
+let grid = [
+  [0, 1, 0],
+  [1, 1, 1],
+  [0, 0, 0],
+];
 ```
 
-Locally preview production build:
+- 1 => living cells
+- 0 => dead cells
 
-```bash
-# npm
-npm run preview
+### Rendering the Grid
 
-# pnpm
-pnpm preview
+- nested v-for to iterate over grid array and render element for each cell.
+- apply dynamic class to style it differently (green for alive, white for dead).
 
-# yarn
-yarn preview
+### Game Logic
 
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- takes current grid as input, return next state of the grid.
+- for each cell, count its live neighbors (8 surrounding cells).
+- RULES:
+  - Underpopulation: A live cell with < 2 live neighbors dies.
+  - Survival: A live cell with 2 or 3 live neighbors lives on to the next generation.
+  - Overpopulation: A live cell with > 3 live neighbors dies.
+  - Reproduction: A dead cell with exactly = 3 live neighbors becomes a live cell.
