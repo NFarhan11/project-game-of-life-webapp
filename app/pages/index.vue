@@ -38,6 +38,40 @@ const toggleCell = (row, col) => {
   tempGrid[row][col] = tempGrid[row][col] === 1 ? 0 : 1;
   // assign copied grid to original
   grid.value = tempGrid
+  // count current cell neighbors
+  console.log(countLiveNeighbors(row, col));
+}
+
+// Count Neighbors
+const countLiveNeighbors = (row, col) => {
+  // counter of live neighbors
+  let liveNeighbors = 0;
+  // define array of directions represent 8 possible offsets for neighbors
+  const directions = [
+    [-1, 0],  // top
+    [-1, 1],  // topright
+    [0, 1],  // right
+    [1, 1],  // bottomright
+    [1, 0],  // bottom
+    [1, -1],  // bottomleft
+    [0, -1],  // left
+    [-1, -1],  // topleft
+  ];
+  // loop through directions
+  directions.forEach(([newRow, newCol]) => {
+    // calculate neighbors newRow and newCol by adding direction offsets to current row and col
+    let neighborsRows = row + newRow;
+    let neighborsCols = col + newCol;
+
+    // [newRow, newCol] must be within gridSize boundary, if exceed ignore them
+    if ((neighborsRows >= 0 && neighborsRows < gridSize) && (neighborsCols >= 0 && neighborsCols < gridSize)) {
+      // if within bounds, add its value to liveNeighbors
+      liveNeighbors += grid.value[neighborsRows][neighborsCols];
+    }
+  });
+
+  // return liveNeighbors count
+  return liveNeighbors;
 }
 
 onMounted(() => {
