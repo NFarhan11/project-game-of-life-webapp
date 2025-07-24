@@ -38,8 +38,6 @@ const toggleCell = (row, col) => {
   tempGrid[row][col] = tempGrid[row][col] === 1 ? 0 : 1;
   // assign copied grid to original
   grid.value = tempGrid
-  // count current cell neighbors
-  console.log(countLiveNeighbors(row, col));
 }
 
 // Count Neighbors
@@ -73,6 +71,42 @@ const countLiveNeighbors = (row, col) => {
   // return liveNeighbors count
   return liveNeighbors;
 }
+
+// calculate Next Generation
+const calculateNextGeneration = () => {
+  // create new empty 2D array (store state of next gen)
+  const newGrid = Array(gridSize).fill(0).map(() => Array(gridSize).fill(0));
+
+  // nested for loop to iterate every cell (row, col) of current grid.value
+  grid.value.forEach((row, rowIndex) => {
+    row.forEach((_, colIndex) => {
+
+      // get currentCellState
+      let currentCellState = grid.value[rowIndex][colIndex];
+      // call countLiveNeighbors
+      let liveNeighbors = countLiveNeighbors(rowIndex, colIndex);
+
+      // apply CONWAY'S RULES
+      if (currentCellState === 1) {  // live cell
+
+        if (liveNeighbors < 2) { // Underpopulation
+          newGrid[rowIndex][colIndex] = 0;
+        } else if (liveNeighbors == 2 || liveNeighbors == 3) {  // Survival
+          newGrid[rowIndex][colIndex] = 1;
+        } else if (liveNeighbors > 3) {  // Overpopulation
+          newGrid[rowIndex][colIndex] = 0;
+        }
+
+      } else {
+        if (liveNeighbors === 3) { // dead cell
+          newGrid[rowIndex][colIndex] = 1; // Reproduction
+        }
+      }
+    });
+  });
+
+  grid.value = newGrid;
+};
 
 onMounted(() => {
   initializeGrid();
