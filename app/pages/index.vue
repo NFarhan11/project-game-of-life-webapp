@@ -2,9 +2,10 @@
   <div>
     <h1>Game of Life</h1>
     <div class="controls">
-      <button @click="startSimulation" :disabled="isRunning">Start</button>
-      <button @click="stopSimulation" :disabled="!isRunning">Stop</button>
-      <button @click="resetGrid" :disabled="isRunning">Reset</button>
+      <button @click="startSimulation" :disabled="isRunning" class="button">Start</button>
+      <button @click="stopSimulation" :disabled="!isRunning" class="button">Stop</button>
+      <button @click="resetGrid" :disabled="isRunning" class="button">Reset</button>
+      <button @click="randomizeGrid" :disabled="isRunning" class="button">Randomize</button>
     </div>
 
     <div class="grid-container">
@@ -22,6 +23,7 @@ const gridSize = 30;  // 30x30 grid
 const cellSize = '15px';  // 15px in CSS
 const grid = ref([]);
 const isRunning = ref(false);
+let simulationInterval = null;
 
 // Initialize grid
 const initializeGrid = () => {
@@ -108,9 +110,32 @@ const calculateNextGeneration = () => {
   grid.value = newGrid;
 };
 
+// Start Simulation
+const startSimulation = () => {
+  isRunning.value = true;
+  simulationInterval = setInterval(calculateNextGeneration, 1000);
+};
+
+// Stop Simulation
+const stopSimulation = () => {
+  isRunning.value = false;
+  clearInterval(simulationInterval);
+  simulationInterval = null;
+}
+
+// Reset Grid
+const resetGrid = () => {
+  stopSimulation();
+  initializeGrid();
+}
+
 onMounted(() => {
   initializeGrid();
 });
+
+onUnmounted(() => {
+  stopSimulation();
+})
 </script>
 
 <style scoped>
@@ -137,5 +162,9 @@ onMounted(() => {
 .controls {
   margin-top: 20px;
   text-align: center;
+}
+
+.button {
+  cursor: pointer;
 }
 </style>
