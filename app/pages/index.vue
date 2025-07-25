@@ -26,9 +26,19 @@ const isRunning = ref(false);
 let simulationInterval = null;
 
 // Initialize grid
-const initializeGrid = () => {
+const initializeGrid = (random = false) => {
   // Create new 2D array and fill it with zeros (dead cells)
   const newGrid = Array(gridSize).fill(0).map(() => Array(gridSize).fill(0));
+
+  // If random
+  if (random) {
+    newGrid.forEach((row, rowIndex) => {
+      row.forEach((_, colIndex) => {
+        newGrid[rowIndex][colIndex] = Math.random() < 0.3 ? 1 : 0;  // 30% is alive
+      });
+    });
+  }
+
   grid.value = newGrid;
 };
 
@@ -121,6 +131,12 @@ const stopSimulation = () => {
   isRunning.value = false;
   clearInterval(simulationInterval);
   simulationInterval = null;
+}
+
+// Randomize Grid
+const randomizeGrid = () => {
+  stopSimulation();
+  initializeGrid(true);
 }
 
 // Reset Grid
